@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+			 xmlns:views="clr-namespace:PrepaCH.Views"
+			 x:Class="PrepaCH.Views.RankTesterViews.RankMCQImage">
+
+	<Grid RowDefinitions="Auto, *, *"
+		  ColumnDefinitions="*, *">
+		<Border Grid.Row="0"
+				Grid.ColumnSpan="2"
+				StrokeShape="RoundRectangle 10"
+				BackgroundColor="Purple"
+				StrokeThickness="2"
+				VerticalOptions="Center"
+				HorizontalOptions="Center"
+				Padding="8">
+			<Label x:Name="TargetAnswer" />
+		</Border>
+
+		<!-- Using RadioButton here is a MASSIVE fucking nightmare for Android... -->
+		<!-- <RadioButton x:Name="A"
+					 Value="0"
+					 Grid.Row="1"
+					 Grid.Column="0"
+					 TextColor="White"
+					 CheckedChanged="OnAnswerChanged">
+			<RadioButton.Content>
+				<views:RankCard x:Name="RankCardA"
+								WidthRequest="200"
+								HeightRequest="300" />
+			</RadioButton.Content>
+		</RadioButton>
+		<RadioButton x:Name="B"
+					 Value="1"
+					 Grid.Row="1"
+					 Grid.Column="1"
+					 TextColor="White"
+					 CheckedChanged="OnAnswerChanged">
+			<RadioButton.Content>
+				<views:RankCard x:Name="RankCardB"
+								WidthRequest="200"
+								HeightRequest="300" />
+			</RadioButton.Content>
+		</RadioButton>
+		<RadioButton x:Name="C"
+					 Value="2"
+					 Grid.Row="2"
+					 Grid.Column="0"
+					 TextColor="White"
+					 CheckedChanged="OnAnswerChanged">
+			<RadioButton.Content>
+				<views:RankCard x:Name="RankCardC"
+								WidthRequest="200"
+								HeightRequest="300" />
+			</RadioButton.Content>
+		</RadioButton>
+		<RadioButton x:Name="D"
+					 Value="3"
+					 Grid.Row="2"
+					 Grid.Column="1"
+					 TextColor="White"
+					 CheckedChanged="OnAnswerChanged">
+			<RadioButton.Content>
+				<views:RankCard x:Name="RankCardD"
+								WidthRequest="200"
+								HeightRequest="300" />
+			</RadioButton.Content>
+		</RadioButton>-->
+
+		<Border x:Name="RankCardBorderA"
+				Grid.Row="1"
+				Grid.Column="0"
+				StrokeShape="RoundRectangle 20"
+				HorizontalOptions="Center"
+				VerticalOptions="Center"
+				StrokeThickness="0"
+				Padding="16">
+			<Border.GestureRecognizers>
+				<TapGestureRecognizer Tapped="OnCardTapped"
+									  CommandParameter="0"/>
+			</Border.GestureRecognizers>
+			<views:RankCard x:Name="RankCardA"
+							WidthRequest="150"
+							HeightRequest="225" />
+		</Border>
+		<Border x:Name="RankCardBorderB"
+				Grid.Row="1"
+				Grid.Column="1"
+				StrokeShape="RoundRectangle 20"
+				HorizontalOptions="Center"
+				VerticalOptions="Center"
+				StrokeThickness="0"
+				Padding="16">
+			<Border.GestureRecognizers>
+				<TapGestureRecognizer Tapped="OnCardTapped"
+									  CommandParameter="1" />
+			</Border.GestureRecognizers>
+			<views:RankCard x:Name="RankCardB"
+							WidthRequest="150"
+							HeightRequest="225" />
+		</Border>
+		<Border x:Name="RankCardBorderC"
+				Grid.Row="2"
+				Grid.Column="0"
+				StrokeShape="RoundRectangle 20"
+				HorizontalOptions="Center"
+				VerticalOptions="Center"
+				StrokeThickness="0"
+				Padding="16">
+			<Border.GestureRecognizers>
+				<TapGestureRecognizer Tapped="OnCardTapped"
+									  CommandParameter="2" />
+			</Border.GestureRecognizers>
+			<views:RankCard x:Name="RankCardC"
+							WidthRequest="150"
+							HeightRequest="225" />
+		</Border>
+		<Border x:Name="RankCardBorderD"
+				Grid.Row="2"
+				Grid.Column="1"
+				StrokeShape="RoundRectangle 20"
+				HorizontalOptions="Center"
+				VerticalOptions="Center"
+				StrokeThickness="0"
+				Padding="16">
+			<Border.GestureRecognizers>
+				<TapGestureRecognizer Tapped="OnCardTapped"
+									  CommandParameter="3" />
+			</Border.GestureRecognizers>
+			<views:RankCard x:Name="RankCardD"
+							WidthRequest="150"
+							HeightRequest="225" />
+		</Border>
+	</Grid>
+</ContentView>

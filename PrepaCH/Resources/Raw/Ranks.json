@@ -1,0 +1,252 @@
+[
+
+  {
+    "fr": "soldat",
+    "de": "Soldat",
+    "it": "soldato",
+    "en":  "private",
+    "frabbr": "sdt",
+    "deabbr": "Sdt",
+    "itabbr": "sdt",
+    "img": "or_1a"
+  },
+  {
+    "fr": "appointé",
+    "de": "Gefreiter",
+    "it": "appuntato",
+    "en": "private",
+    "frabbr": "app",
+    "deabbr": "Gfr",
+    "itabbr": "app",
+    "img": "or_2"
+  },
+  {
+    "fr": "appointé-chef",
+    "de": "Obergefreiter",
+    "it": "appuntato capo",
+    "en": "lance corporal",
+    "frabbr": "app chef",
+    "deabbr": "Obgfr",
+    "itabbr": "app capo",
+    "img": "or_3"
+  },
+  {
+    "fr": "caporal",
+    "de": "Korporal",
+    "it": "caporale",
+    "en": "corporal",
+    "frabbr": "cpl",
+    "deabbr": "Kpl",
+    "itabbr": "cpl",
+    "img": "or_4"
+  },
+
+
+
+  {
+    "fr": "sergent",
+    "de": "Wachtmeister",
+    "it": "sergente",
+    "en": "sergeant",
+    "frabbr": "sgt",
+    "deabbr": "Wm",
+    "itabbr": "sgt",
+    "img": "or_5b"
+  },
+  {
+    "fr": "sergent-chef",
+    "de": "Oberwachtmeister",
+    "it": "sergente capo",
+    "en": "sergeant first class",
+    "frabbr": "sgt chef",
+    "deabbr": "Obwm",
+    "itabbr": "sgt capo",
+    "img": "or_5a"
+  },
+  {
+    "fr": "sergent-major",
+    "de": "Feldweibel",
+    "it": "sergente maggiore",
+    "en": "sergeant major",
+    "frabbr": "sgtm",
+    "deabbr": "Fw",
+    "itabbr": "sgtm",
+    "img": "or_6"
+  },
+  {
+    "fr": "sergent-major chef",
+    "de": "Hauptfeldweibel",
+    "it": "sergente maggiore capo",
+    "en": "chief sergeant major",
+    "frabbr": "sgtm chef",
+    "deabbr": "Hptfw",
+    "itabbr": "sgtm capo",
+    "img": "or_7"
+  },
+
+
+  {
+    "fr": "fourrier",
+    "de": "Fourrier",
+    "it": "furiere",
+    "en": "quartermaster sergeant",
+    "frabbr": "four",
+    "deabbr": "Four",
+    "itabbr": "fur",
+    "img": "or_7_fourrier"
+  },
+  {
+    "fr": "adjudant sous-officier",
+    "de": "Adjutant Unteroffizier",
+    "it": "aiutante suttufficiale",
+    "en": "warrant officer",
+    "frabbr": "adj sof",
+    "deabbr": "Adj Uof",
+    "itabbr": "aiut suff",
+    "img": "or_8"
+  },
+  {
+    "fr": "adjudant d'état-major",
+    "de": "Stabsadjutant",
+    "it": "aiutante di stato maggiore",
+    "en": "staff warrant officer",
+    "frabbr": "adj EM",
+    "deabbr": "Stabsadj",
+    "itabbr": "aiut SM",
+    "img": "or_9"
+  },
+  {
+    "fr": "adjudant-major",
+    "de": "Hauptadjutant",
+    "it": "aiutante maggiore",
+    "en": "master warrant officer",
+    "frabbr": "adj maj",
+    "deabbr": "Hptadj",
+    "itabbr": "aiut magg",
+    "img": "or_9_master"
+  },
+  {
+    "fr": "adjudant-chef",
+    "de": "Chefadjutant",
+    "it": "aiutante capo",
+    "en": "chief warrant officer",
+    "frabbr": "adj chef",
+    "deabbr": "Chefadj",
+    "itabbr": "aiut cappo",
+    "img": "or_9_chief"
+  },
+
+
+
+  {
+    "fr": "lieutenant",
+    "de": "Leutnant",
+    "it": "tenente",
+    "en": "second lieutenant",
+    "frabbr": "lt",
+    "deabbr": "Lt",
+    "itabbr": "ten",
+    "img": "of_1b"
+  },
+  {
+    "fr": "premier-lieutenant",
+    "de": "Oberleutnant",
+    "it": "primotenente",
+    "en": "first lieutenant",
+    "frabbr": "plt",
+    "deabbr": "Oblt",
+    "itabbr": "l ten",
+    "img": "of_1a"
+  },
+  {
+    "fr": "capitaine",
+    "de": "Hauptmann",
+    "it": "capitano",
+    "en": "captain",
+    "frabbr": "cap",
+    "deabbr": "Hptm",
+    "itabbr": "cap",
+    "img": "of_2"
+  },
+
+
+  {
+    "fr": "officier spécialiste",
+    "de": "Fachoffizier",
+    "it": "ufficiale specialista",
+    "en": "specialist officer",
+    "frabbr": "of spéc",
+    "deabbr": "Fachof",
+    "itabbr": "uff spec",
+    "img": "of_1a_5"
+  },
+  {
+    "fr": "major",
+    "de": "Major",
+    "it": "maggiore",
+    "en": "major",
+    "frabbr": "maj",
+    "deabbr": "Maj",
+    "itabbr": "magg",
+    "img": "of_3"
+  },
+  {
+    "fr": "lieutenant-colonel",
+    "de": "Oberstleutnant",
+    "it": "tenente colonnello",
+    "en": "lieutenant colonel",
+    "frabbr": "lt col",
+    "deabbr": "Oberstlt",
+    "itabbr": "ten col",
+    "img": "of_4"
+  },
+  {
+    "fr": "colonel",
+    "de": "Oberst",
+    "it": "colonnello",
+    "en": "colonel",
+    "frabbr": "col",
+    "deabbr": "Oberst",
+    "itabbr": "col",
+    "img": "of_5"
+  },
+
+
+  {
+    "fr": "brigadier",
+    "de": "Brigadier",
+    "it": "brigadiere",
+    "en": "brigadier general",
+    "frabbr": "br",
+    "deabbr": "Br",
+    "itabbr": "br",
+    "img": "of_6"
+  },
+  {
+    "fr": "divisionnaire",
+    "de": "Divisionär",
+    "it": "divisionario",
+    "en": "major general",
+    "frabbr": "div",
+    "deabbr": "Div",
+    "itabbr": "div",
+    "img": "of_7"
+  },
+  {
+    "fr": "commandant de corps",
+    "de": "Korpskommandant",
+    "it": "commandante di corpo",
+    "en": "lieutenant general",
+    "frabbr": "cdt C",
+    "deabbr": "KKdt",
+    "itabbr": "cdt C",
+    "img": "of_8"
+  },
+  {
+    "fr": "générale",
+    "de": "General",
+    "it": "generale",
+    "en": "general",
+    "img": "of_9"
+  }
+]

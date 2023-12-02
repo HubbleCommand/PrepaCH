@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+			 x:Class="PrepaCH.Pages.ConvocationDates"
+			 Title="Convocation Dates"
+			 xmlns:pages="clr-namespace:PrepaCH.Pages"
+			 xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit">
+	<ContentPage.BindingContext>
+		<pages:ConvocationDatesViewModel></pages:ConvocationDatesViewModel>
+	</ContentPage.BindingContext>
+	<ContentPage.Resources>
+		<ResourceDictionary>
+			<toolkit:SelectedItemEventArgsConverter x:Key="SelectedItemEventArgsConverter" />
+		</ResourceDictionary>
+		<toolkit:InvertedBoolConverter x:Key="NotIsSearching" />
+	</ContentPage.Resources>
+	<Grid RowDefinitions="Auto, *">
+		<VerticalStackLayout Grid.Row="0">
+			<HorizontalStackLayout>
+				<Label Text="From"
+					   VerticalOptions="Center"
+					   HorizontalOptions="Center" />
+				<!--<DatePicker x:Name="From"
+			MaximumDate="{Binding To}"
+			Date="{Binding From}" />-->
+				<DatePicker x:Name="FromDatePicker"
+							Date="{Binding From}" />
+			</HorizontalStackLayout>
+			<HorizontalStackLayout>
+				<Label Text="To"
+					   VerticalOptions="Center"
+					   HorizontalOptions="Center" />
+				<!--<DatePicker x:Name="To"
+			MinimumDate="{Binding From}"
+			Date="{Binding To}" />-->
+				<DatePicker x:Name="ToDatePicker"
+							Date="{Binding To}" />
+			</HorizontalStackLayout>
+			<Entry x:Name="UnitName"
+				   Placeholder="Enter the name of your unit here"
+				   ClearButtonVisibility="WhileEditing"
+				   IsSpellCheckEnabled="false"
+				   IsTextPredictionEnabled="false"
+				   Text="{Binding UnitName}" />
+			<!-- Had following in Button IsEnabled="{Binding IsSearching, Converter={StaticResource NotIsSearching}}" -->
+			<!-- Moved away from command as not ideal for long-running tasks 
+				Command="{Binding SearchCommand}"
+				Clicked="SearchBtn_Clicked"-->
+			<Button x:Name="SearchBtn"
+					Text="Search"
+					Command="{Binding SearchCommand}"
+					HorizontalOptions="Center"/>
+		</VerticalStackLayout>
+		<ActivityIndicator x:Name="ActivityIndicator"
+						   Grid.Row="1"
+						   VerticalOptions="Center"
+						   HorizontalOptions="Center"
+						   IsRunning="{Binding IsSearching}"/>
+		<ListView ItemsSource="{Binding Units}"
+				  Grid.Row="1">
+			<ListView.Behaviors>
+				<toolkit:EventToCommandBehavior EventName="ItemSelected"
+												Command="{Binding ItemSelectedCommand}"
+												EventArgsConverter="{StaticResource SelectedItemEventArgsConverter}" />
+			</ListView.Behaviors>
+			<ListView.ItemTemplate>
+				<DataTemplate x:DataType="pages:Unit">
+					<ViewCell>
+						<VerticalStackLayout>
+							<Label Text="{Binding Name}"
+								   FontAttributes="Bold" />
+							<Label FontAttributes="Italic"
+								   VerticalOptions="End">
+								<Label.Text>
+									<MultiBinding StringFormat="{}{0} - {1}">
+										<Binding Path="From" />
+										<Binding Path="Until" />
+									</MultiBinding>
+								</Label.Text>
+							</Label>
+						</VerticalStackLayout>
+					</ViewCell>
+				</DataTemplate>
+			</ListView.ItemTemplate>
+		</ListView>
+	</Grid>
+</ContentPage>

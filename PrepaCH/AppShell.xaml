@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell x:Class="PrepaCH.AppShell"
+	   xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+	   xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	   xmlns:local="clr-namespace:PrepaCH"
+	   xmlns:pages="clr-namespace:PrepaCH.Pages"
+	   Shell.FlyoutBehavior="Flyout">
+
+	<ShellContent Title="Home"
+				  ContentTemplate="{DataTemplate local:MainPage}"
+				  Route="MainPage" />
+	<ShellContent Title="Rank Tester"
+				  ContentTemplate="{DataTemplate pages:RankTester}"
+				  Route="ranktester" />
+	<ShellContent Title="Convocation Dates"
+				  ContentTemplate="{DataTemplate pages:ConvocationDates}"
+				  Route="convocation" />
+	<ShellContent Title="Range Dates"
+				  ContentTemplate="{DataTemplate pages:RangeDates}"
+				  Route="shooting" />
+	<ShellContent Title="Item Checklist for Service"
+				  ContentTemplate="{DataTemplate pages:ItemChecklist}"
+				  Route="checklist" />
+
+</Shell>

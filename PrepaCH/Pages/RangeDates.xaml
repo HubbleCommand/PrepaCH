@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+			 x:Class="PrepaCH.Pages.RangeDates"
+             Title="Range Dates"
+			 xmlns:vm="clr-namespace:PrepaCH.Pages"
+			 x:DataType="vm:RangeDatesViewModel">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="*" />
+		</Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*" />
+		</Grid.ColumnDefinitions>
+
+		<VerticalStackLayout Grid.Row="0">
+			<Picker Title="Select a program"
+					ItemsSource="{Binding Programs}"
+					ItemDisplayBinding="{Binding Name}"
+					SelectedItem="{Binding Program}" />
+			<Picker Title="Select a weapon"
+					ItemsSource="{Binding Weapons}"
+					ItemDisplayBinding="{Binding Name}"
+					SelectedItem="{Binding Weapon}" />
+			<Picker Title="Select a canton"
+					ItemsSource="{Binding Cantons}"
+					ItemDisplayBinding="{Binding Name}"
+					SelectedItem="{Binding Canton}" />
+			<HorizontalStackLayout>
+				<DatePicker x:Name="FromDatePicker"
+							Date="{Binding From}" />
+				<DatePicker x:Name="ToDatePicker"
+							Date="{Binding To}" />
+			</HorizontalStackLayout>
+			<HorizontalStackLayout HorizontalOptions="Center">
+				<Button x:Name="SearchBtn"
+						Text="Search"
+						Command="{Binding SearchCommand}" />
+				<Label Text="or"
+					   VerticalOptions="Center" />
+				<Button x:Name="FindNearBtn"
+						Text="Find Near Me"
+						Command="{Binding FindNearMeCommand}" />
+			</HorizontalStackLayout>
+		</VerticalStackLayout>
+
+		<TableView x:Name="ResultsTableView"
+				   Intent="Data"
+				   Grid.Row="1" />
+		<ActivityIndicator x:Name="ActivityIndicator"
+						   Grid.Row="1"
+						   VerticalOptions="Center"
+						   HorizontalOptions="Center" />
+	</Grid>
+</ContentPage>

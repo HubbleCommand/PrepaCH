@@ -1,0 +1,288 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="WelcomeTitle" xml:space="preserve">
+    <value>Bienvenue!</value>
+  </data>
+  <data name="WelcomeMessage" xml:space="preserve">
+    <value>Ceci est une travail en cours, et démontre quelques des fonctionnalités de l'application possible PrepaCH</value>
+  </data>
+  <data name="CompetitionShooting" xml:space="preserve">
+    <value>Festival de tir/compétition de club</value>
+  </data>
+  <data name="FederalProgram50m" xml:space="preserve">
+    <value>Programme Fédérale 50m</value>
+  </data>
+  <data name="FieldShooting" xml:space="preserve">
+    <value>Tir de compagne</value>
+  </data>
+  <data name="ObligatoryProgram" xml:space="preserve">
+    <value>Programme Obligatoire</value>
+  </data>
+  <data name="Other" xml:space="preserve">
+    <value>Autres</value>
+  </data>
+  <data name="YoungShooters" xml:space="preserve">
+    <value>Jeunes tireurs</value>
+  </data>
+  <data name="Gun" xml:space="preserve">
+    <value>Fass</value>
+  </data>
+  <data name="Pistol" xml:space="preserve">
+    <value>Pistolet</value>
+  </data>
+  <data name="Chk-ServiceBooklet" xml:space="preserve">
+    <value>livret de service</value>
+  </data>
+  <data name="Chk-PersonalWeapon" xml:space="preserve">
+    <value>fusil d'assault 90 avec magasin et culasse</value>
+  </data>
+  <data name="Chk-WeaponCleaningKit" xml:space="preserve">
+    <value>trousse de netoyyage du fusil</value>
+  </data>
+  <data name="Chk-Bayonet" xml:space="preserve">
+    <value>baionette avec fourreau ainsi que le porte fourreau de la baionette</value>
+  </data>
+  <data name="Chk-CombatHelmet" xml:space="preserve">
+    <value>casque de combat avec sa coiffe</value>
+  </data>
+  <data name="Chk-UniformB" xml:space="preserve">
+    <value>tenue B / tenue de camouflage 90 avec haut, bas, ceinture, et veste thermique</value>
+  </data>
+  <data name="Chk-LegElastics" xml:space="preserve">
+    <value>paires d'élastiques de jambe</value>
+  </data>
+  <data name="Chk-Beret" xml:space="preserve">
+    <value>béret 95 avec emblème de votre brigade</value>
+  </data>
+  <data name="Chk-UniformA" xml:space="preserve">
+    <value>tenue A avec pantalon, 1x veston, 1x veste de pluie, 1x ceinture, 2x cravates, 2x chemises longues, 2x chemises courtes</value>
+  </data>
+  <data name="Chk-NBCMask" xml:space="preserve">
+    <value>masque de protection 95</value>
+  </data>
+  <data name="Chk-NBCMaskGTHolder" xml:space="preserve">
+    <value>garniture sacoche de masque de protection</value>
+  </data>
+  <data name="Chk-GT" xml:space="preserve">
+    <value>(GT) harnais avec ceinturon 90, sac à munition gauche et droite, sacoche à gourde, sacoche pour maque de protection avec sa garniture</value>
+  </data>
+  <data name="Chk-GreyBags" xml:space="preserve">
+    <value>sachets gris</value>
+  </data>
+  <data name="Chk-UniformABag" xml:space="preserve">
+    <value>sac à vêtements (pour tenu A)</value>
+  </data>
+  <data name="Chk-BootCleaningKit" xml:space="preserve">
+    <value>trousse de nettoyage KS</value>
+  </data>
+  <data name="Chk-RegulationBags" xml:space="preserve">
+    <value>poches à réglement</value>
+  </data>
+  <data name="Chk-CombatGloves16" xml:space="preserve">
+    <value>paire de gants 16 (gants de combat)</value>
+  </data>
+  <data name="Chk-ThermalGloves17" xml:space="preserve">
+    <value>paire de gants thermiques 17</value>
+  </data>
+  <data name="Chk-Scarf" xml:space="preserve">
+    <value>écharpe</value>
+  </data>
+  <data name="Chk-SleepingBag" xml:space="preserve">
+    <value>sac de couchage avec housse extérieur du sac de couchage</value>
+  </data>
+  <data name="Chk-CombatBag" xml:space="preserve">
+    <value>sac de combat</value>
+  </data>
+  <data name="Chk-CAT" xml:space="preserve">
+    <value>garrot CAT</value>
+  </data>
+  <data name="Chk-PPI" xml:space="preserve">
+    <value>PPI</value>
+  </data>
+  <data name="Chk-MouthGuard" xml:space="preserve">
+    <value>protège-dents</value>
+  </data>
+  <data name="Chk-Caddie" xml:space="preserve">
+    <value>sac de caddie avec la bretelle du sac ainsi que le chariot</value>
+  </data>
+  <data name="Chk-Gamelle" xml:space="preserve">
+    <value>gamelle avec service</value>
+  </data>
+  <data name="Chk-Gourd" xml:space="preserve">
+    <value>gourde avec goblet</value>
+  </data>
+  <data name="Chk-Backpack04" xml:space="preserve">
+    <value>sac dorsal 04</value>
+  </data>
+  <data name="Chk-FunctionInsignia" xml:space="preserve">
+    <value>insignes d'arme</value>
+  </data>
+  <data name="Chk-MilitiaInsignia" xml:space="preserve">
+    <value>insignes de milice</value>
+  </data>
+  <data name="Chk-PocketKnife08" xml:space="preserve">
+    <value>couteau 08 avec l'étui couteau 08</value>
+  </data>
+  <data name="Chk-HearingProtection" xml:space="preserve">
+    <value>jeu de protège-ouie</value>
+  </data>
+  <data name="Chk-TShirt90" xml:space="preserve">
+    <value>t-shirt 90</value>
+  </data>
+  <data name="Chk-MarkingJersey" xml:space="preserve">
+    <value>maillot de marquage (jaune)</value>
+  </data>
+  <data name="Chk-TShirt06" xml:space="preserve">
+    <value>t-shirt 06</value>
+  </data>
+  <data name="Chk-BonnetMarin" xml:space="preserve">
+    <value>bonnet marin</value>
+  </data>
+  <data name="Chk-LongPants06" xml:space="preserve">
+    <value>long pants 06</value>
+  </data>
+  <data name="Chk-PolarVest06" xml:space="preserve">
+    <value>veste polaire 06</value>
+  </data>
+  <data name="Chk-Boxers06" xml:space="preserve">
+    <value>boxer shorts 06</value>
+  </data>
+  <data name="Chk-Knaggis" xml:space="preserve">
+    <value>knaggis</value>
+  </data>
+  <data name="Chk-CombatGlasses14" xml:space="preserve">
+    <value>lunette de combat 14</value>
+  </data>
+  <data name="Chk-CombatBoots" xml:space="preserve">
+    <value>paire de KS marqué dans le livret de service</value>
+  </data>
+  <data name="Chk-Dress" xml:space="preserve">
+    <value>jupe (femme)</value>
+  </data>
+  <data name="Chk-Purse" xml:space="preserve">
+    <value>sac à main (femme)</value>
+  </data>
+  <data name="Score" xml:space="preserve">
+    <value>points</value>
+  </data>
+  <data name="NoResults" xml:space="preserve">
+    <value>Pas de résultats</value>
+  </data>
+</root>

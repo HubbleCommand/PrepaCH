@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34221.43
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrepaCH", "PrepaCH\PrepaCH.csproj", "{8FE668FE-5E45-4B17-8006-1EEAD7048035}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CHGeoJsonMerger", "CHGeoJsonMerger\CHGeoJsonMerger.csproj", "{569C1A2E-4D2C-428A-9C54-B882819374C0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8FE668FE-5E45-4B17-8006-1EEAD7048035}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8FE668FE-5E45-4B17-8006-1EEAD7048035}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8FE668FE-5E45-4B17-8006-1EEAD7048035}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{8FE668FE-5E45-4B17-8006-1EEAD7048035}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8FE668FE-5E45-4B17-8006-1EEAD7048035}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8FE668FE-5E45-4B17-8006-1EEAD7048035}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{569C1A2E-4D2C-428A-9C54-B882819374C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{569C1A2E-4D2C-428A-9C54-B882819374C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{569C1A2E-4D2C-428A-9C54-B882819374C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{569C1A2E-4D2C-428A-9C54-B882819374C0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {317AD630-CA8B-46CB-9614-07C439734573}
+	EndGlobalSection
+EndGlobal

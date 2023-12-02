@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+			 x:Class="PrepaCH.Pages.ItemChecklist"
+			 xmlns:views="clr-namespace:PrepaCH.Views"
+             Title="ItemChecklist">
+	<Grid RowDefinitions="Auto, *">
+		<!-- TODO use tabs, but for now this works... -->
+		<!--
+		<Picker x:Name="SourcePicker"
+				Grid.Row="0">
+			<Picker.ItemsSource>
+				<x:Array Type="{x:Type x:String}">
+					<x:String>Personal</x:String>
+					<x:String>Service</x:String>
+				</x:Array>
+			</Picker.ItemsSource>
+		</Picker>
+		-->
+
+		<views:ChecklistView Grid.Row="1" x:Name="ChecklistView" />
+		<!--<ListView Grid.Row="1">
+			<ListView.ItemTemplate>
+				<DataTemplate x:DataType="views:ChecklistItem">
+					<ViewCell>
+						<HorizontalStackLayout>
+							<Label Text="{Binding Name}"
+								   FontAttributes="Bold" />
+							<Label FontAttributes="Italic"
+								   VerticalOptions="End">
+								<Label.Text>
+									<MultiBinding StringFormat="{}{0} - {1}">
+										<Binding Path="From" />
+										<Binding Path="Until" />
+									</MultiBinding>
+								</Label.Text>
+							</Label>
+							<Switch />
+						</HorizontalStackLayout>
+					</ViewCell>
+				</DataTemplate>
+			</ListView.ItemTemplate>
+		</ListView>-->
+	</Grid>
+</ContentPage>
