@@ -16,13 +16,12 @@ Has three differen excercise types:
 - MCQ for a given rank ensignia (choose rank name)
 - MCQ for a given rank name (choose rank ensignia)
 - Match rank names to their ensignia
-![](/screenshots/rank_tester.mp4|width=100)
+
 <video controls width="250">
   <source src="/screenshots/rank_tester.mp4" type="video/mp4" />
 </video>
 
 ### Check Convocation Dates
-![convocation dates image](/screenshots/convocation_dates.jpg|width=100)
 <img src="/screenshots/convocation_dates.jpg" alt="convocation dates image" width="100"> 
 Allows users to check the next convocation dates for their unit. A reverse engineering of [this site](https://www.vtg.admin.ch/fr/mon-service-militaire/dates-de-convocation.html) that provides the same service.
 
