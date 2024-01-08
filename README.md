@@ -1,6 +1,6 @@
 # Prepa CH
 
-Utility app to prepare for military service. Translated to English, French, German, and Italian.
+Utility app to prepare for military service, made in .NET MAUI. Translated to English, French, German, and Italian.
 
 ## Project organisation
 There are two solutions in this VIsual Studio project:
