@@ -17,9 +17,9 @@ Has three differen excercise types:
 - MCQ for a given rank name (choose rank ensignia)
 - Match rank names to their ensignia
 
-<video width="250">
-  <source src="/screenshots/rank_tester.mp4" type="video/mp4" />
-</video>
+
+https://github.com/HubbleCommand/PrepaCH/assets/39958198/3995fbf1-eda2-4e8f-b587-050b85322a6e
+
 
 ### Check Convocation Dates
 <img src="/screenshots/convocation_dates.jpg" alt="convocation dates image" width="200"> 
