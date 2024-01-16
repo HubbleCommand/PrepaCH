@@ -2,6 +2,8 @@
 
 Utility app to prepare for military service, made in .NET MAUI. Translated to English, French, German, and Italian.
 
+After developping this app, it really feels like .NET MAUI isn't production ready; there's many bugs and inconsistent behavior.
+
 ## Project organisation
 There are two solutions in this VIsual Studio project:
 - CHGeoJsonMerger : a utility to merge GeoJSON files into a more usable format for PrepaCH
@@ -28,6 +30,8 @@ Allows users to check the next convocation dates for their unit. A reverse engin
 ### Check Range Dates
 <img src="/screenshots/range_dates_4.jpg" alt="range dates image" width="200"> 
 Allows users to check range dates for obligatory shooting, searching by program type, weapon type, canton, and date. It is a reverse engineering of the [website that provides the same service](https://ssv-vva.esport.ch/p2plus/ssv/schiesstageabfragerec.asp?). Additionally, the app allows users to search for the range dates that are closest to them. [There is a newer online service](https://www.sat.admin.ch/search-shooting-days), but it doesn't provide a functionality to search by distance.
+
+The app uses both of these services.
 
 ### Item Checklist
 <img src="/screenshots/item_checklist.jpg" alt="checklist image" width="200"> 
