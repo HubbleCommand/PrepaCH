@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.Maui.Devices.Sensors;
+using Newtonsoft.Json;
 using System.Diagnostics;
 
 namespace PrepaCH
@@ -92,6 +93,7 @@ namespace PrepaCH
             catch (PermissionException pEx)
             {
                 // Handle permission exception
+                await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
             }
             catch (Exception ex)
             {
