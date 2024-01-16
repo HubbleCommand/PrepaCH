@@ -2,8 +2,6 @@
 
 Utility app to prepare for military service, made in .NET MAUI. Translated to English, French, German, and Italian.
 
-After developping this app, it really feels like .NET MAUI isn't production ready; there's many bugs and inconsistent behavior.
-
 ## Project organisation
 There are two solutions in this VIsual Studio project:
 - CHGeoJsonMerger : a utility to merge GeoJSON files into a more usable format for PrepaCH
