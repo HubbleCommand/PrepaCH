@@ -436,24 +436,10 @@ public partial class RangeDatesViewModel : ObservableObject
                         //but ONLY if searching for nearby
                                 else if (WithCommuneSearch)
                                 {
-                                    Debug.WriteLine("Cuck");
-                                    FeatureCollection fc = await GetCommunes();
-                                    //https://stackoverflow.com/questions/32589177/find-4-sequence-numbers-in-string-using-c-sharp
-                                    var regex = new Regex(@"\d{4}");
-
-                                    foreach (Match match in regex.Matches(nameAndLocation[1]))
+                                    var location = await GetCommune(nameAndLocation[1]);
+                                    if (location != null)
                                     {
-                                        Debug.WriteLine($"Match {match.Value}");
-                                        foreach (var feature in fc.Features)
-                                        {
-                                            //Some strange casting issues here with defaut int which is 32-bit (? why)
-                                            if ((Int64)feature.Properties["PLZ"] == Int64.Parse(match.Value))
-                                            {
-                                                Debug.WriteLine("Matched PLZ");
-                                                GeoJSON.Net.Geometry.Point point = feature.Geometry as GeoJSON.Net.Geometry.Point;
-                                                rangesDates.Last().Location = new Location(point.Coordinates.Latitude, point.Coordinates.Longitude);
-                                            }
-                                        }
+                                        rangesDates.Last().Location = location;
                                     }
                                 }
                             }
@@ -492,27 +478,35 @@ public partial class RangeDatesViewModel : ObservableObject
 
                     foreach (SATQueryResultItem item in resultParsed.items)
                     {
-                        //Ugh, stuff is different here is well, doesn't group by stand...
-                        Stand stand = new Stand(item.organizationName);
-                        Stand.RangeDate rd = new Stand.RangeDate(item.from, item.to, item.organizationName, item.location);
-                        stand.StandRangeDates.Add(rd);
-
-                        //Another difference here is that the coordinates are in a Swiss CRS (see CHGeoJsonMerger for more details abt how much of a problem that is)
-                        // unfortunately this means that for range dates starting in 2024, distancees will be calculated based on the canton they are in...
-                        if (WithCommuneSearch && item.combinedLocationString.Length > 0)
+                        Stand? stand = null;
+                        foreach (Stand _stand in rangesDates)
                         {
-                            FeatureCollection fc = await GetCommunes();
-                            //https://stackoverflow.com/questions/32589177/find-4-sequence-numbers-in-string-using-c-sharp
-                            var regex = new Regex(@"\d{4}");
-
-                            var location = await GetCommune(item.combinedLocationString);
-                            if (location != null)
+                            if (_stand.Name == item.organizationName)
                             {
-                                stand.Location = location;
+                                stand = _stand;
+                                break;
                             }
                         }
 
-                        rangesDates.Add(stand);
+                        //Ugh, stuff is different here is well, doesn't group by stand... doing it myself for consistent UI...
+                        if (stand == null)
+                        {
+                            stand = new Stand(item.organizationName);
+                            rangesDates.Add(stand);
+
+                            //Another difference here is that the coordinates are in a Swiss CRS (see CHGeoJsonMerger for more details abt how much of a problem that is)
+                            // unfortunately this means that for range dates starting in 2024, distancees will be calculated based on the canton they are in...
+                            if (WithCommuneSearch && item.combinedLocationString.Length > 0)
+                            {
+                                var location = await GetCommune(item.combinedLocationString);
+                                if (location != null)
+                                {
+                                    stand.Location = location;
+                                }
+                            }
+                        }
+                        Stand.RangeDate rd = new Stand.RangeDate(item.from, item.to, item.organizationName, item.location);
+                        stand.StandRangeDates.Add(rd);
                     }
                 }
             }
