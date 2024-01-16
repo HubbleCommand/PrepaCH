@@ -20,6 +20,11 @@ namespace PrepaCH
             return $"{dateTime.Year}{dateTime.Month:00}{dateTime.Day:00}";
         }
 
+        public static string ToSATAdminParameter(this DateTime dateTime)
+        {
+            return $"{dateTime.Year}-{dateTime.Month:00}-{dateTime.Day:00}T00:00:00.000Z";
+        }
+
         public static double CalculateDistance2D(this Location from, Location to, DistanceUnits units = default)
         {
             Debug.WriteLine(from);

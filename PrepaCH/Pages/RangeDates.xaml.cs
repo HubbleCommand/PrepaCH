@@ -11,6 +11,43 @@ using System.Xml;
 
 namespace PrepaCH.Pages;
 
+[Serializable]
+public class SATQueryResultItem
+{
+    public string disciplineId { get; set; }
+
+    public string disciplineShortNameGerman { get; set; }
+    public string disciplineShortNameFrench { get; set; }
+    public string disciplineShortNameItalian { get; set; }
+
+    public string disciplineLongNameGerman { get; set; }
+    public string disciplineLongNameFrench { get; set; }
+    public string disciplineLongNameItalian { get; set; }
+
+    public DateTime from { get; set; }
+    public DateTime to { get; set; }
+
+    public string location { get; set; }
+    public string combinedLocationString { get; set; }
+    public string coordinates { get; set; }
+    public string canton { get; set; }
+
+    public string organizationId { get; set; }
+    public string organizationName { get; set; }
+
+    public override string ToString()
+    {
+        //return $"{{disciplineId: {disciplineId}, disciplineShortNameFrench: {disciplineShortNameFrench}, from: {from}, location: {location}, coordinates: {coordinates}}}";
+        return $"{{name: {organizationName}, location: {location}, coordinates: {coordinates}}}";
+    }
+}
+
+[Serializable]
+public class SATQueryResults
+{
+    public List<SATQueryResultItem> items { get; set; }
+}
+
 public partial class RangeDatesViewModel : ObservableObject
 {
     #region Static Options for pickers
@@ -34,13 +71,27 @@ public partial class RangeDatesViewModel : ObservableObject
 
     public List<PickerOption> Programs { get; set; } = new()
     {
-        new PickerOption(Strings.ObligatoryProgram, "OP"),
-        new PickerOption(Strings.FederalProgram50m, "BP"),
-        new PickerOption(Strings.FieldShooting, "FS"),
-        new PickerOption(Strings.CompetitionShooting, "SF"),
-        new PickerOption(Strings.YoungShooters, "JS"),
-        new PickerOption(Strings.Other, "Anderes"),
+        new PickerOption(Strings.ObligatoryProgram, "OP"), //1
+        new PickerOption(Strings.FederalProgram50m, "BP"),  //It's TR now? Also 5
+        new PickerOption(Strings.FieldShooting, "FS"),  //2
+        new PickerOption(Strings.CompetitionShooting, "SF"), //4
+        new PickerOption(Strings.YoungShooters, "JS"), //3
+        new PickerOption(Strings.Other, "Anderes"), //6
     };
+
+    public static int GetSATAdminProgramKey(PickerOption option)
+    {
+        switch (option.Value)
+        {
+            case "OP": return 1;
+            case "BP": return 5;
+            case "FS": return 2;
+            case "SF": return 4;
+            case "JS": return 3;
+            case "Anderes": return 6;
+        }
+        return -1;
+    }
 
     public List<PickerOption> Cantons { get; set; } = new()
     {
@@ -135,9 +186,8 @@ public partial class RangeDatesViewModel : ObservableObject
     [ObservableProperty]
     public DateTime to = new DateTime(DateTime.Now.Year, 12, 31);
 
-    FeatureCollection? communes = null;
-
-    private async Task<FeatureCollection> GetCommunes()
+    static FeatureCollection? communes = null;
+    public static async Task<FeatureCollection> GetCommunes()
     {
         if (communes != null)
         {
@@ -168,8 +218,12 @@ public partial class RangeDatesViewModel : ObservableObject
         //Search & filter by closest & earliest
         // first canton is ALL
         //string queryStr = BuildQuery(DateTime.Now, To, Cantons.First(), Program, Weapon);
-        string queryStr = BuildQuery(From, To, Cantons.First(), Program, Weapon);
-        List<Stand> results = await Query(queryStr, true);
+        //string queryStr = BuildQuery(From, To, Cantons.First(), Program, Weapon);
+        //List<Stand> results = await Query(queryStr, true);
+
+        RangeDateQuery query = new(DateTime.Now, To, new HashSet<PickerOption>() { Cantons.First() }, Program, Weapon);
+        query.WithCommuneSearch = true;
+        List<Stand> results = await query.Query();
 
         //Sort by distance etc
         Debug.WriteLine($"Removing nulls (current count {results.Count})");
@@ -187,154 +241,301 @@ public partial class RangeDatesViewModel : ObservableObject
         DisplayResults(withLocation);
     }
 
+    //Refactored query out, as there is now a new query system
+    class RangeDateQuery
+    {
+        public readonly DateTime From;
+        public readonly DateTime To;
+        public readonly HashSet<PickerOption> Canton;
+        public readonly PickerOption Program;
+        public readonly PickerOption Weapon;
+        public bool WithCommuneSearch = false;
+
+        public static readonly DateTime APISPlitDate = new DateTime(2024, 1, 1);
+
+        public RangeDateQuery(DateTime from, DateTime to, HashSet<PickerOption> canton, PickerOption program, PickerOption weapon)
+        {
+            From = from;
+            To = to;
+            Program = program;
+            Weapon = weapon;
+
+            if (From < APISPlitDate)
+            {
+                Canton = new HashSet<PickerOption>() { canton.First() };
+            }
+
+            if (From < APISPlitDate && To > APISPlitDate)
+            {
+                //THis is to avoid having to do a query on both APIs & merging the results
+                From = APISPlitDate;
+            }
+        }
+
+        private Uri GetEndpointURI()
+        {
+            if (From < APISPlitDate)
+                return new Uri("https://ssv-vva.esport.ch/p2plus/ssv/SAT4Calls.asp");
+            else
+                return new Uri("https://www.sat.admin.ch/api/shootingDayDeclaration/search");
+        }
+
+        private string BuildQuery()
+        {
+            if (From < APISPlitDate)
+                return $"<call><funcname>getSchiesstage</funcname><p1>{Program.Value}</p1><p1>{Weapon.Value}</p1><p1>{Canton.First().Value}</p1><p1></p1><p1>{From.ToVVAEsportCHParameter()}</p1><p1>{To.ToVVAEsportCHParameter()}</p1><p1>en</p1></call>";
+            else
+            {
+                //NOTE didn't do pagination of results before, not doing it now...
+                string qry = "{\"startRow\":0,\"endRow\":200,";
+
+                //Root of filters
+                qry += "\"filterModels\":{";
+
+                //Date
+                qry += $"\"from\":{{\"filterType\":\"date\",\"variant\":\"inRange\",\"filter\":\"{From.ToSATAdminParameter()}\",\"filterTo\":\"{To.ToSATAdminParameter()}\"}},";
+
+                //Weapon
+                if (Weapon.Value == "G")
+                {
+                    qry += "\"disciplineId\":{\"filterType\":\"multi-select\",\"variant\":\"singleTargetInListGuid\",\"filter\":[\"4c1f8d60-2dd2-406b-8fcf-b3323619abe1\",\"5bf1f6f5-c201-479b-bb21-f2dab042cf11\",\"a38d8f3f-2860-4f23-bba3-e38d5412c707\",\"b013fd1a-6e24-4ac0-bba4-a8255c70817e\"]},";
+                }
+                else
+                {
+                    qry += "\"disciplineId\":{\"filterType\":\"multi-select\",\"variant\":\"singleTargetInListGuid\",\"filter\":[\"03f033b9-0379-4eb7-a721-620189fe8a6c\",\"32e26f77-e0f6-4af9-bafa-e67e958d21ed\",\"4b059f82-4fab-4c4e-abe9-084305fdac4e\",\"cfb57703-470e-43c3-beec-faafb6c6357c\"]},";
+                }
+
+                //Program
+                qry += $"\"type\":{{\"filterType\":\"number\",\"variant\":\"equals\",\"filter\":{GetSATAdminProgramKey(Program)}}},";
+
+                //End of filters root
+                qry += "},";
+
+                //Trailing
+                qry += "\"includeCount\":false,\"sortModel\":[{\"columnId\":\"from\",\"sort\":\"asc\"}]}";
+                return qry;
+            }
+        }
+
+        private async Task<Location?> GetCommune(string location)
+        {
+            FeatureCollection fc = await GetCommunes();
+            //https://stackoverflow.com/questions/32589177/find-4-sequence-numbers-in-string-using-c-sharp
+            var regex = new Regex(@"\d{4}");
+
+            foreach (Match match in regex.Matches(location))
+            {
+                Debug.WriteLine($"Match {match.Value}");
+                foreach (var feature in fc.Features)
+                {
+                    //Some strange casting issues here with defaut int which is 32-bit (? why)
+                    if ((Int64)feature.Properties["PLZ"] == Int64.Parse(match.Value))
+                    {
+                        Debug.WriteLine("Matched PLZ");
+                        GeoJSON.Net.Geometry.Point point = feature.Geometry as GeoJSON.Net.Geometry.Point;
+                        return new Location(point.Coordinates.Latitude, point.Coordinates.Longitude);
+                    }
+                }
+            }
+
+            return null;
+        }
+
+
+        public async Task<List<Stand>> Query()
+        {
+            HttpClient _client = new HttpClient();
+            List<Stand> rangesDates = new List<Stand>();
+            string queryStr = BuildQuery();
+
+            try {
+                if (From < APISPlitDate)
+                {
+                    StringContent query = new StringContent(queryStr, Encoding.UTF8, "text/xml");
+                    Debug.WriteLine($"Query - {queryStr}");
+
+                    Uri uri = new Uri("https://ssv-vva.esport.ch/p2plus/ssv/SAT4Calls.asp");
+
+                    HttpResponseMessage response = await _client.PostAsync(GetEndpointURI(), query);
+                    Debug.WriteLine($"Response Code - {response.StatusCode}");
+                    Debug.WriteLine($"Response Content - {response.Content.ReadAsStringAsync().Result}");
+
+                    XmlDocument doc = new XmlDocument();
+                    doc.LoadXml(response.Content.ReadAsStringAsync().Result);
+                    Debug.WriteLine($"Response Root - {doc.DocumentElement.InnerText}");
+
+                    string[] rows = doc.DocumentElement.InnerText.Split(new string[] { "|||" }, StringSplitOptions.None);
+
+                    int standIndex = 0;
+
+
+                    for (int i = 1; i < rows.Length; i++)
+                    {
+                        string row = rows[i];
+                        Debug.WriteLine(row);
+                        string[] lineSplit = row.Split(new string[] { "|" }, StringSplitOptions.None);
+
+                        int col1 = int.Parse(lineSplit[0]);
+                        int col2 = int.Parse(lineSplit[1]);
+                        string col3 = lineSplit[2];
+
+                        //If the second column is equal to 1, we are at a new stand, we can then go to the next line
+                        if (col2 == 1)
+                        {
+                            Debug.WriteLine($"Adding stand {col3}");
+                            standIndex = col1;
+                            rangesDates.Add(new Stand(col3));
+                            continue;
+                        }
+
+                        if (standIndex == col2)
+                        {
+                            Debug.WriteLine($"Adding range date for stand {rangesDates.Last().Name}");
+                            //We split the 3rd column by it's delimiters
+                            string[] col3Split = col3.Split(new string[] { "    " }, StringSplitOptions.None);
+
+                            //Some cantons have nested shit (i.e BS), seemingly where they split it by clubs... for now, ignore
+                            if (col3Split.Length == 1)
+                            {
+                                rangesDates.Last().StandClubs.Add(new Stand.Club(col3));
+                                continue;
+                            }
+
+                            Debug.WriteLine($"Col3 size - {col3Split.Length}");
+
+                            //Split last, which is name + location
+                            string[] nameAndLocation = col3Split[2].Split(new string[] { "+++" }, StringSplitOptions.None);
+                            Debug.WriteLine($"Name - {nameAndLocation[0]}");
+                            Debug.WriteLine($"Location - {nameAndLocation[1]}");
+
+                            string[] splitTime = col3Split[1].Split(new string[] { "-" }, StringSplitOptions.TrimEntries); ;
+                            Debug.WriteLine($"splitTime size - {splitTime.Length}");
+                            string startStr = $"{col3Split[0]} {splitTime[0]}";
+                            string endStr = $"{col3Split[0]} {splitTime[1]}";
+                            DateTime start = DateTime.ParseExact(startStr, "dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture);
+                            DateTime end = DateTime.ParseExact(endStr, "dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture);
+
+                            //Ok, for the love of thank fuck, I think that each stand EITHER just has range dates, OR has clubs with their range dates
+                            // no mix, so just need to check if the last range has clubs, and if so add the current range date to the last club
+
+                            //Only update location if there is no location already
+                            if (rangesDates.Last().Location == null)
+                            {
+                                Debug.WriteLine($"Gonna get location");
+                                //2 scenarios are possible, either it's a GPS position in lat+long format, or a Commune, NPA Commune format (any other format cannot be extrapolated)
+
+                                string[] gpsSPlitTry = nameAndLocation[1].Split(new string[] { "+" }, StringSplitOptions.TrimEntries);// ("+");
+                                Debug.WriteLine($"GPS Split {gpsSPlitTry.Length}");
+                                if (gpsSPlitTry.Length == 2)
+                                {
+                                    //On language is set to French, will fail parsing as double is in "46.123" instead of "46,123" (period vs comma), so need to do invariant
+                                    rangesDates.Last().Location = new Location(double.Parse(gpsSPlitTry[0], CultureInfo.InvariantCulture), double.Parse(gpsSPlitTry[1], CultureInfo.InvariantCulture));
+                                    Debug.WriteLine($"Location : {rangesDates.Last().Location}");
+                                }
+                        //Need to search the fucking goddamn GeoJSON
+                        //but ONLY if searching for nearby
+                                else if (WithCommuneSearch)
+                                {
+                                    Debug.WriteLine("Cuck");
+                                    FeatureCollection fc = await GetCommunes();
+                                    //https://stackoverflow.com/questions/32589177/find-4-sequence-numbers-in-string-using-c-sharp
+                                    var regex = new Regex(@"\d{4}");
+
+                                    foreach (Match match in regex.Matches(nameAndLocation[1]))
+                                    {
+                                        Debug.WriteLine($"Match {match.Value}");
+                                        foreach (var feature in fc.Features)
+                                        {
+                                            //Some strange casting issues here with defaut int which is 32-bit (? why)
+                                            if ((Int64)feature.Properties["PLZ"] == Int64.Parse(match.Value))
+                                            {
+                                                Debug.WriteLine("Matched PLZ");
+                                                GeoJSON.Net.Geometry.Point point = feature.Geometry as GeoJSON.Net.Geometry.Point;
+                                                rangesDates.Last().Location = new Location(point.Coordinates.Latitude, point.Coordinates.Longitude);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            Stand.RangeDate rd = new Stand.RangeDate(start, end, nameAndLocation[0], nameAndLocation[1]);
+                            if (rangesDates.Last().StandClubs.Count > 0)
+                            {
+                                rangesDates.Last().StandClubs.Last().ClubRangeDates.Add(rd);
+                            }
+                            else
+                            {
+                                rangesDates.Last().StandRangeDates.Add(rd);
+                            }
+                        }
+                    }
+                }
+
+                //Post-2024 dates
+                else
+                {
+                    StringContent query = new StringContent(queryStr, Encoding.UTF8, "application/json");
+                    Debug.WriteLine($"Query - {queryStr}");
+                    HttpResponseMessage response = await _client.PostAsync(GetEndpointURI(), query);
+                    string responseString = await response.Content.ReadAsStringAsync();
+                    Debug.WriteLine($"Response Code - {response.StatusCode}");
+                    Debug.WriteLine($"Response Content - {responseString}");
+
+                    var settings = new JsonSerializerSettings
+                    {
+                        NullValueHandling = NullValueHandling.Ignore,
+                        MissingMemberHandling = MissingMemberHandling.Ignore
+                    };
+                    SATQueryResults resultParsed = JsonConvert.DeserializeObject<SATQueryResults>(responseString, settings);
+                    Debug.WriteLine($"Response deserialized count - {resultParsed.items.Count()}");
+                    Debug.WriteLine($"Response deserialized - {string.Join(", ", resultParsed.items)}");
+
+                    foreach (SATQueryResultItem item in resultParsed.items)
+                    {
+                        //Ugh, stuff is different here is well, doesn't group by stand...
+                        Stand stand = new Stand(item.organizationName);
+                        Stand.RangeDate rd = new Stand.RangeDate(item.from, item.to, item.organizationName, item.location);
+                        stand.StandRangeDates.Add(rd);
+
+                        //Another difference here is that the coordinates are in a Swiss CRS (see CHGeoJsonMerger for more details abt how much of a problem that is)
+                        // unfortunately this means that for range dates starting in 2024, distancees will be calculated based on the canton they are in...
+                        if (WithCommuneSearch && item.combinedLocationString.Length > 0)
+                        {
+                            FeatureCollection fc = await GetCommunes();
+                            //https://stackoverflow.com/questions/32589177/find-4-sequence-numbers-in-string-using-c-sharp
+                            var regex = new Regex(@"\d{4}");
+
+                            var location = await GetCommune(item.combinedLocationString);
+                            if (location != null)
+                            {
+                                stand.Location = location;
+                            }
+                        }
+
+                        rangesDates.Add(stand);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                App.PopupService.Alert("Failed Search", "Whoops", "Ok");
+                Debug.WriteLine($"Exception thing : {ex.Message}");
+                //Searching.Invoke(this, false);
+                rangesDates.Clear(); //For clarity, remove existing things added before crash...
+            }
+
+            return rangesDates;
+        }
+    }
+
     [RelayCommand]
     public async Task Search()
     {
         Searching.Invoke(this, true);
 
-        string queryStr = BuildQuery(From, To, Canton, Program, Weapon);
-        var results = await Query(queryStr);
+        RangeDateQuery query = new RangeDateQuery(From, To, new HashSet<PickerOption>() { Canton }, Program, Weapon);
+        var results = await query.Query();
         DisplayResults(results);
-    }
-
-    private async Task<List<Stand>> Query(string queryStr, bool withCommuneSearch = false)
-    {
-        List<Stand> rangesDates = new List<Stand>();
-
-        try
-        {
-            HttpClient _client = new HttpClient(); ;
-
-            StringContent query = new StringContent(queryStr, Encoding.UTF8, "text/xml");
-            Debug.WriteLine($"Query - {queryStr}");
-
-            Uri uri = new Uri("https://ssv-vva.esport.ch/p2plus/ssv/SAT4Calls.asp");
-
-            HttpResponseMessage response = await _client.PostAsync(uri, query);
-            Debug.WriteLine($"Response Code - {response.StatusCode}");
-            Debug.WriteLine($"Response Content - {response.Content.ReadAsStringAsync().Result}");
-
-            XmlDocument doc = new XmlDocument();
-            doc.LoadXml(response.Content.ReadAsStringAsync().Result);
-            Debug.WriteLine($"Response Root - {doc.DocumentElement.InnerText}");
-
-            string[] rows = doc.DocumentElement.InnerText.Split(new string[] { "|||" }, StringSplitOptions.None);
-
-            int standIndex = 0;
-            
-
-            for (int i = 1; i < rows.Length; i++)
-            {
-                string row = rows[i];
-                Debug.WriteLine(row);
-                string[] lineSplit = row.Split(new string[] { "|" }, StringSplitOptions.None);
-
-                int col1 = int.Parse(lineSplit[0]);
-                int col2 = int.Parse(lineSplit[1]);
-                string col3 = lineSplit[2];
-
-                //If the second column is equal to 1, we are at a new stand, we can then go to the next line
-                if (col2 == 1)
-                {
-                    Debug.WriteLine($"Adding stand {col3}");
-                    standIndex = col1;
-                    rangesDates.Add(new Stand(col3));
-                    continue;
-                }
-
-                if (standIndex == col2)
-                {
-                    Debug.WriteLine($"Adding range date for stand {rangesDates.Last().Name}");
-                    //We split the 3rd column by it's delimiters
-                    string[] col3Split = col3.Split(new string[] { "    " }, StringSplitOptions.None);
-
-                    //Some cantons have nested shit (i.e BS), seemingly where they split it by clubs... for now, ignore
-                    if (col3Split.Length == 1)
-                    {
-                        rangesDates.Last().StandClubs.Add(new Stand.Club(col3));
-                        continue;
-                    }
-
-                    Debug.WriteLine($"Col3 size - {col3Split.Length}");
-
-                    //Split last, which is name + location
-                    string[] nameAndLocation = col3Split[2].Split(new string[] { "+++" }, StringSplitOptions.None);
-                    Debug.WriteLine($"Name - {nameAndLocation[0]}");
-                    Debug.WriteLine($"Location - {nameAndLocation[1]}");
-
-                    string[] splitTime = col3Split[1].Split(new string[] { "-" }, StringSplitOptions.TrimEntries); ;
-                    Debug.WriteLine($"splitTime size - {splitTime.Length}");
-                    string startStr = $"{col3Split[0]} {splitTime[0]}";
-                    string endStr = $"{col3Split[0]} {splitTime[1]}";
-                    DateTime start = DateTime.ParseExact(startStr, "dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture);
-                    DateTime end = DateTime.ParseExact(endStr, "dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture);
-
-                    //Ok, for the love of thank fuck, I think that each stand EITHER just has range dates, OR has clubs with their range dates
-                    // no mix, so just need to check if the last range has clubs, and if so add the current range date to the last club
-
-                    //Only update location if there is no location already
-                    if (rangesDates.Last().Location == null)
-                    {
-                        Debug.WriteLine($"Gonna get location");
-                        //2 scenarios are possible, either it's a GPS position in lat+long format, or a Commune, NPA Commune format (any other format cannot be extrapolated)
-
-                        string[] gpsSPlitTry = nameAndLocation[1].Split(new string[] { "+" }, StringSplitOptions.TrimEntries);// ("+");
-                        Debug.WriteLine($"GPS Split {gpsSPlitTry.Length}");
-                        if (gpsSPlitTry.Length == 2)
-                        {
-                            //On language is set to French, will fail parsing as double is in "46.123" instead of "46,123" (period vs comma), so need to do invariant
-                            rangesDates.Last().Location = new Location(double.Parse(gpsSPlitTry[0], CultureInfo.InvariantCulture), double.Parse(gpsSPlitTry[1], CultureInfo.InvariantCulture));
-                            Debug.WriteLine($"Location : {rangesDates.Last().Location}");
-                        }
-                        //Need to search the fucking goddamn GeoJSON
-                        //but ONLY if searching for nearby
-                        else if (withCommuneSearch)
-                        {
-                            Debug.WriteLine("Cuck");
-                            FeatureCollection fc = await GetCommunes();
-                            //https://stackoverflow.com/questions/32589177/find-4-sequence-numbers-in-string-using-c-sharp
-                            var regex = new Regex(@"\d{4}");
-
-                            foreach (Match match in regex.Matches(nameAndLocation[1]))
-                            {
-                                Debug.WriteLine($"Match {match.Value}");
-                                foreach (var feature in fc.Features)
-                                {
-                                    //Some strange casting issues here with defaut int which is 32-bit (? why)
-                                    if ((Int64)feature.Properties["PLZ"] == Int64.Parse(match.Value))
-                                    {
-                                        Debug.WriteLine("Matched PLZ");
-                                        GeoJSON.Net.Geometry.Point point = feature.Geometry as GeoJSON.Net.Geometry.Point;
-                                        rangesDates.Last().Location = new Location(point.Coordinates.Latitude, point.Coordinates.Longitude);
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    Stand.RangeDate rd = new Stand.RangeDate(start, end, nameAndLocation[0], nameAndLocation[1]);
-                    if (rangesDates.Last().StandClubs.Count > 0)
-                    {
-                        rangesDates.Last().StandClubs.Last().ClubRangeDates.Add(rd);
-                    }
-                    else
-                    {
-                        rangesDates.Last().StandRangeDates.Add(rd);
-                    }
-                }
-            }
-        } 
-        catch (Exception ex)
-        {
-            App.PopupService.Alert("Failed Search", "Whoops", "Ok");
-            Debug.WriteLine($"Exception thing : {ex.Message}");
-            Searching.Invoke(this, false);
-            rangesDates.Clear(); //For clarity, remove existing things added before crash...
-        }
-
-        //TODO for simplicity, I only want to show this as a 1-dimensional list (no tree or table or whatever)
-        // - also allow sorting by date or location or whatever...
-        return rangesDates;
     }
 
     private void DisplayResults(List<Stand> dates)
