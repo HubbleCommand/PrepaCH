@@ -602,7 +602,7 @@ public partial class RangeDates : ContentPage
 
             if (stand.Distance > 0)
             {
-                title += " - " + stand.Distance.ToString();
+                title += " - " + stand.Distance.ToString("N1") + " km";
             }
 
             TableSection section = new TableSection(title) {   };
