@@ -120,6 +120,9 @@
   <data name="CompetitionShooting" xml:space="preserve">
     <value>Festival/competizione di club di tiro</value>
   </data>
+  <data name="FailedSearch" xml:space="preserve">
+    <value>Ricerca fallita</value>
+  </data>
   <data name="FederalProgram50m" xml:space="preserve">
     <value>Programma federale 50m</value>
   </data>
@@ -128,6 +131,12 @@
   </data>
   <data name="Gun" xml:space="preserve">
     <value>Fucile</value>
+  </data>
+  <data name="NoLocationMessage" xml:space="preserve">
+    <value>Assicurati di aver concesso le autorizzazioni appropriate o che la posizione del tuo dispositivo sia stata attivata.</value>
+  </data>
+  <data name="NoLocationTitle" xml:space="preserve">
+    <value>Impossibile ottenere la posizione</value>
   </data>
   <data name="NoResults" xml:space="preserve">
     <value>nessun risultato</value>

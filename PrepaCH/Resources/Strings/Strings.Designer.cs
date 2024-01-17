@@ -466,6 +466,15 @@ namespace PrepaCH.Resources.Strings {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Search Failed.
+        /// </summary>
+        internal static string FailedSearch {
+            get {
+                return ResourceManager.GetString("FailedSearch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Federal Program 50m.
         /// </summary>
         internal static string FederalProgram50m {
@@ -489,6 +498,24 @@ namespace PrepaCH.Resources.Strings {
         internal static string Gun {
             get {
                 return ResourceManager.GetString("Gun", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Make sure you have given the appropriate permissions or that your device&apos;s location has been turned on..
+        /// </summary>
+        internal static string NoLocationMessage {
+            get {
+                return ResourceManager.GetString("NoLocationMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot get location.
+        /// </summary>
+        internal static string NoLocationTitle {
+            get {
+                return ResourceManager.GetString("NoLocationTitle", resourceCulture);
             }
         }
         

@@ -285,4 +285,13 @@
   <data name="NoResults" xml:space="preserve">
     <value>Pas de résultats</value>
   </data>
+  <data name="FailedSearch" xml:space="preserve">
+    <value>La recherche a échoué</value>
+  </data>
+  <data name="NoLocationMessage" xml:space="preserve">
+    <value>Assurez-vous que vous avez donné les autorisations appropriées ou que la localisation de votre appareil a été activée.</value>
+  </data>
+  <data name="NoLocationTitle" xml:space="preserve">
+    <value>Impossible d'obtenir l'emplacement</value>
+  </data>
 </root>

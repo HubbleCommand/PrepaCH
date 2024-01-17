@@ -285,4 +285,13 @@
   <data name="NoResults" xml:space="preserve">
     <value>No results</value>
   </data>
+  <data name="FailedSearch" xml:space="preserve">
+    <value>Search Failed</value>
+  </data>
+  <data name="NoLocationMessage" xml:space="preserve">
+    <value>Make sure you have given the appropriate permissions or that your device's location has been turned on.</value>
+  </data>
+  <data name="NoLocationTitle" xml:space="preserve">
+    <value>Cannot get location</value>
+  </data>
 </root>

@@ -215,7 +215,7 @@ public partial class RangeDatesViewModel : ObservableObject
 #nullable disable
         if (location == null)
         {
-            await App.PopupService.Alert("Cannot get location", "Make sure you have given the appropriate permissions or that your device's location has been turned on.", "OK");
+            await App.PopupService.Alert(Strings.NoLocationTitle, Strings.NoLocationMessage, "OK");
         }
 
         RangeDateQuery query = new(DateTime.Now, To, new HashSet<PickerOption>() { Cantons.First() }, Program, Weapon);
