@@ -14,3 +14,8 @@ General app to help prep for ER / RS & CR & include general helpful information
 - Check important dates
 	- Obligatory shooting dates https://www.vtg.admin.ch/fr/mon-service-militaire/dates-de-convocation.html
 	- Next Service / Repetition https://ssv-vva.esport.ch/p2plus/ssv/schiesstageabfragerec.asp
+
+## Good Learning Resources
+- https://www.youtube.com/watch?v=v36s9snCrXU
+- https://www.youtube.com/watch?v=DuNLR_NJv8U
+- https://github.com/dotnet-presentations/dotnet-maui-workshop/blob/main/Part%206%20-%20AppThemes/README.md
