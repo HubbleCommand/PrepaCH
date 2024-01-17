@@ -145,7 +145,9 @@ public partial class RangeDatesViewModel : ObservableObject
         }
 
         public string Name;
+#nullable enable
         public Location? Location;
+#nullable disable
         public List<RangeDate> StandRangeDates;
         public double Distance = -1;
 
@@ -186,7 +188,9 @@ public partial class RangeDatesViewModel : ObservableObject
     [ObservableProperty]
     public DateTime to = new DateTime(DateTime.Now.Year, 12, 31);
 
+#nullable enable
     static FeatureCollection? communes = null;
+#nullable disable
     public static async Task<FeatureCollection> GetCommunes()
     {
         if (communes != null)
@@ -206,42 +210,31 @@ public partial class RangeDatesViewModel : ObservableObject
     {
         Searching.Invoke(this, true);
 
+#nullable enable
         Location? location = await Utils.GetCachedLocation();
-
+#nullable disable
         if (location == null)
         {
             await App.PopupService.Alert("Cannot get location", "Make sure you have given the appropriate permissions or that your device's location has been turned on.", "OK");
         }
 
-        Debug.WriteLine($"Location : {location}");
-
-        //Search & filter by closest & earliest
-        // first canton is ALL
-        //string queryStr = BuildQuery(DateTime.Now, To, Cantons.First(), Program, Weapon);
-        //string queryStr = BuildQuery(From, To, Cantons.First(), Program, Weapon);
-        //List<Stand> results = await Query(queryStr, true);
-
         RangeDateQuery query = new(DateTime.Now, To, new HashSet<PickerOption>() { Cantons.First() }, Program, Weapon);
         query.WithCommuneSearch = true;
         List<Stand> results = await query.Query();
 
-        //Sort by distance etc
-        Debug.WriteLine($"Removing nulls (current count {results.Count})");
         List<Stand> withLocation = (from result in results
                            where result.Location != null
                            select result).ToList();
-        Debug.WriteLine($"Removed nulls (new count {withLocation.Count})");
+        Debug.WriteLine($"Removed nulls (removed {results.Count - withLocation.Count})");
         foreach (var q in withLocation)
         {
             q.Distance = location.CalculateDistance2D(q.Location);
         }
-        //withLocation.Sort((x, y) => location.CalculateDistance2D(x.Location).CompareTo(location.CalculateDistance2D(y.Location)));
         withLocation.Sort((x, y) => x.Distance.CompareTo(y.Distance));
         Debug.WriteLine("Sorted results by distance");
         DisplayResults(withLocation);
     }
 
-    //Refactored query out, as there is now a new query system
     class RangeDateQuery
     {
         public readonly DateTime From;
@@ -267,7 +260,7 @@ public partial class RangeDatesViewModel : ObservableObject
 
             if (From < APISPlitDate && To > APISPlitDate)
             {
-                //THis is to avoid having to do a query on both APIs & merging the results
+                //This is to avoid having to do a query on both APIs & merging the results
                 From = APISPlitDate;
             }
         }
@@ -286,16 +279,9 @@ public partial class RangeDatesViewModel : ObservableObject
                 return $"<call><funcname>getSchiesstage</funcname><p1>{Program.Value}</p1><p1>{Weapon.Value}</p1><p1>{Canton.First().Value}</p1><p1></p1><p1>{From.ToVVAEsportCHParameter()}</p1><p1>{To.ToVVAEsportCHParameter()}</p1><p1>en</p1></call>";
             else
             {
-                //NOTE didn't do pagination of results before, not doing it now...
-                string qry = "{\"startRow\":0,\"endRow\":200,";
-
-                //Root of filters
-                qry += "\"filterModels\":{";
-
-                //Date
+                string qry = "{\"startRow\":0,\"endRow\":200,\"filterModels\":{";
                 qry += $"\"from\":{{\"filterType\":\"date\",\"variant\":\"inRange\",\"filter\":\"{From.ToSATAdminParameter()}\",\"filterTo\":\"{To.ToSATAdminParameter()}\"}},";
 
-                //Weapon
                 if (Weapon.Value == "G")
                 {
                     qry += "\"disciplineId\":{\"filterType\":\"multi-select\",\"variant\":\"singleTargetInListGuid\",\"filter\":[\"4c1f8d60-2dd2-406b-8fcf-b3323619abe1\",\"5bf1f6f5-c201-479b-bb21-f2dab042cf11\",\"a38d8f3f-2860-4f23-bba3-e38d5412c707\",\"b013fd1a-6e24-4ac0-bba4-a8255c70817e\"]},";
@@ -307,17 +293,14 @@ public partial class RangeDatesViewModel : ObservableObject
 
                 //Program
                 qry += $"\"type\":{{\"filterType\":\"number\",\"variant\":\"equals\",\"filter\":{GetSATAdminProgramKey(Program)}}},";
-
-                //End of filters root
-                qry += "},";
-
-                //Trailing
-                qry += "\"includeCount\":false,\"sortModel\":[{\"columnId\":\"from\",\"sort\":\"asc\"}]}";
+                qry += "},\"includeCount\":false,\"sortModel\":[{\"columnId\":\"from\",\"sort\":\"asc\"}]}";    //Trailing
                 return qry;
             }
         }
 
+#nullable enable
         private async Task<Location?> GetCommune(string location)
+#nullable disable
         {
             FeatureCollection fc = await GetCommunes();
             //https://stackoverflow.com/questions/32589177/find-4-sequence-numbers-in-string-using-c-sharp
@@ -358,16 +341,11 @@ public partial class RangeDatesViewModel : ObservableObject
 
                     HttpResponseMessage response = await _client.PostAsync(GetEndpointURI(), query);
                     Debug.WriteLine($"Response Code - {response.StatusCode}");
-                    Debug.WriteLine($"Response Content - {response.Content.ReadAsStringAsync().Result}");
 
                     XmlDocument doc = new XmlDocument();
                     doc.LoadXml(response.Content.ReadAsStringAsync().Result);
-                    Debug.WriteLine($"Response Root - {doc.DocumentElement.InnerText}");
-
                     string[] rows = doc.DocumentElement.InnerText.Split(new string[] { "|||" }, StringSplitOptions.None);
-
                     int standIndex = 0;
-
 
                     for (int i = 1; i < rows.Length; i++)
                     {
@@ -379,7 +357,7 @@ public partial class RangeDatesViewModel : ObservableObject
                         int col2 = int.Parse(lineSplit[1]);
                         string col3 = lineSplit[2];
 
-                        //If the second column is equal to 1, we are at a new stand, we can then go to the next line
+                        //If the second column is equal to 1, at a new stand, so can go to the next line
                         if (col2 == 1)
                         {
                             Debug.WriteLine($"Adding stand {col3}");
@@ -391,7 +369,6 @@ public partial class RangeDatesViewModel : ObservableObject
                         if (standIndex == col2)
                         {
                             Debug.WriteLine($"Adding range date for stand {rangesDates.Last().Name}");
-                            //We split the 3rd column by it's delimiters
                             string[] col3Split = col3.Split(new string[] { "    " }, StringSplitOptions.None);
 
                             //Some cantons have nested shit (i.e BS), seemingly where they split it by clubs... for now, ignore
@@ -421,7 +398,6 @@ public partial class RangeDatesViewModel : ObservableObject
                             //Only update location if there is no location already
                             if (rangesDates.Last().Location == null)
                             {
-                                Debug.WriteLine($"Gonna get location");
                                 //2 scenarios are possible, either it's a GPS position in lat+long format, or a Commune, NPA Commune format (any other format cannot be extrapolated)
 
                                 string[] gpsSPlitTry = nameAndLocation[1].Split(new string[] { "+" }, StringSplitOptions.TrimEntries);// ("+");
@@ -432,8 +408,6 @@ public partial class RangeDatesViewModel : ObservableObject
                                     rangesDates.Last().Location = new Location(double.Parse(gpsSPlitTry[0], CultureInfo.InvariantCulture), double.Parse(gpsSPlitTry[1], CultureInfo.InvariantCulture));
                                     Debug.WriteLine($"Location : {rangesDates.Last().Location}");
                                 }
-                        //Need to search the fucking goddamn GeoJSON
-                        //but ONLY if searching for nearby
                                 else if (WithCommuneSearch)
                                 {
                                     var location = await GetCommune(nameAndLocation[1]);
@@ -478,7 +452,9 @@ public partial class RangeDatesViewModel : ObservableObject
 
                     foreach (SATQueryResultItem item in resultParsed.items)
                     {
+#nullable enable
                         Stand? stand = null;
+#nullable disable
                         foreach (Stand _stand in rangesDates)
                         {
                             if (_stand.Name == item.organizationName)
@@ -512,9 +488,8 @@ public partial class RangeDatesViewModel : ObservableObject
             }
             catch (Exception ex)
             {
-                App.PopupService.Alert("Failed Search", "Whoops", "Ok");
-                Debug.WriteLine($"Exception thing : {ex.Message}");
-                //Searching.Invoke(this, false);
+                _ = App.PopupService.Alert(Strings.FailedSearch, "", "Ok");
+                Debug.WriteLine($"Exception while searching : {ex.Message}");
                 rangesDates.Clear(); //For clarity, remove existing things added before crash...
             }
 
@@ -537,18 +512,13 @@ public partial class RangeDatesViewModel : ObservableObject
         Results.Invoke(this, dates);
     }
 
-    private string BuildQuery(DateTime from, DateTime to, PickerOption canton, PickerOption program, PickerOption weapon)
-    {
-        return $"<call><funcname>getSchiesstage</funcname><p1>{program.Value}</p1><p1>{weapon.Value}</p1><p1>{canton.Value}</p1><p1></p1><p1>{from.ToVVAEsportCHParameter()}</p1><p1>{to.ToVVAEsportCHParameter()}</p1><p1>en</p1></call>";
-    }
-
     /**
      * For reverse binding VM -> View(C#) to be able to work with TableView
      */
     public event EventHandler<List<Stand>> Results;
 
     /**
-     * For reverse binding VM -> View(C#) to be able to clear TableView & show activity
+     * For reverse binding VM -> View(C#) to be able to clear TableView and show activity
      */
     public event EventHandler<bool> Searching;
 
@@ -584,12 +554,7 @@ public partial class RangeDates : ContentPage
     {
         FindNearBtn.IsEnabled = true;
         SearchBtn.IsEnabled = true;
-
         ActivityIndicator.IsRunning = false;
-        //Here, do shiz with the TableView
-        // as cannot access View from ViewModel
-        Debug.WriteLine("Triggered Results event");
-
         ResultsTableView.Root.Clear();
 
         //https://learn.microsoft.com/en-us/dotnet/maui/user-interface/controls/tableview
