@@ -1,12 +1,9 @@
-using PrepaCH.Resources.Strings;
 using PrepaCH.Views;
-using System.Diagnostics;
 
 namespace PrepaCH.Pages;
 
 public partial class ItemChecklist : ContentPage
 {
-    //Values here defaulting to false, will be found when put into UI...
     private List<ChecklistItem> Personal = new()
     {
         new ChecklistItem("Chk-Towel", 1),
@@ -70,13 +67,7 @@ public partial class ItemChecklist : ContentPage
 
     private void SourcePicker_SelectedIndexChanged(object sender, EventArgs e)
     {
-        var picker = (Picker)sender;
-        int selectedIndex = picker.SelectedIndex;
-        
-        Debug.WriteLine($"CompetitionShooting Language value {Strings.ResourceManager.GetString("CompetitionShooting")}");
-        Debug.WriteLine($"Current Index {selectedIndex}");
-
-        switch (selectedIndex)
+        switch (((Picker)sender).SelectedIndex)
         {
             case 0:
                 ChecklistView.Items = Personal; break;

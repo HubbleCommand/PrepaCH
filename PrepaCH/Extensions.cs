@@ -1,6 +1,4 @@
-﻿using Microsoft.Maui.Devices.Sensors;
-using Newtonsoft.Json;
-using System.Diagnostics;
+﻿using Newtonsoft.Json;
 
 namespace PrepaCH
 {
@@ -28,9 +26,6 @@ namespace PrepaCH
 
         public static double CalculateDistance2D(this Location from, Location to, DistanceUnits units = default)
         {
-            Debug.WriteLine(from);
-            Debug.WriteLine(to);
-            Debug.WriteLine(units);
             return Location.CalculateDistance(from, to, units);
         }
     }
@@ -43,7 +38,7 @@ namespace PrepaCH
         public static HashSet<int> RandomSet(int count, int min, int max)
         {
             Random r = new Random();
-            HashSet<int> result = new HashSet<int>();
+            HashSet<int> result = new();
 
             while (result.Count < count)
             {
@@ -82,20 +77,11 @@ namespace PrepaCH
             {
                 return await Geolocation.Default.GetLastKnownLocationAsync();
             }
-            catch (FeatureNotSupportedException fnsEx)
+            catch (PermissionException)
             {
-                // Handle not supported on device exception
-            }
-            catch (FeatureNotEnabledException fneEx)
-            {
-                // Handle not enabled on device exception
-            }
-            catch (PermissionException pEx)
-            {
-                // Handle permission exception
                 await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
             }
-            catch (Exception ex)
+            catch (Exception)   //FeatureNotEnabledException, FeatureNotSupportedException
             {
                 // Unable to get location
             }
